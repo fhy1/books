@@ -3,17 +3,17 @@
     <div class="type-title">
       <div>
         <span />
-        {{ TitleNwme }}
+        {{ hashType[typeId] }}小说列表
       </div>
     </div>
     <div class="type-rank">
-      <div class="type-rank-item" v-for="item in rankook" :key="item.id">
-        <p class="type-rank-item-chapter">{{ item.title }}</p>
+      <div class="type-rank-item" v-for="item in rankList" :key="item.novel_id">
+        <p class="type-rank-item-chapter">{{ item.name }}</p>
         <p class="type-rank-item-chapter">
-          <router-link to="/2/33">{{ item.chapter }}</router-link>
+          <router-link :to="'/' + item.novel_id">{{ item.latest_chapter.title }}</router-link>
         </p>
-        <p class="type-rank-item-auth">{{ item.audit }}</p>
-        <p class="type-rank-item-auth">{{ item.auth }}</p>
+        <p class="type-rank-item-auth">{{item.serial_status == 1 ? '已完结' : '连载中'}}</p>
+        <p class="type-rank-item-auth">{{ item.author }}</p>
       </div>
     </div>
     <div class="footer">
@@ -24,110 +24,45 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import CFooter from "../components/CFooter.vue";
+import store from "@/store";
+import api from "@/api";
 
 @Component({
   components: { CFooter }
 })
 export default class App extends Vue {
   typeId: any = 1;
+  rankList = [];
 
-  rankook = [
-    {
-      id: "1",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "2",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "3",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "4",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "5",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "6",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "7",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "8",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "9",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "10",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    }
-  ];
+  get ListName() {
+    return (store.state as any).position.ListName;
+  }
 
-  get TitleNwme() {
-    let txt = "";
-    if (this.typeId == 2) {
-      txt = "玄幻小说列表";
-    } else if (this.typeId == 3) {
-      txt = "修真小说列表";
-    } else if (this.typeId == 4) {
-      txt = "都市小说列表";
-    } else if (this.typeId == 5) {
-      txt = "古言小说列表";
-    } else if (this.typeId == 6) {
-      txt = "历史小说列表";
-    }
-    return txt;
+  async recommendList(type_id: any) {
+    this.rankList = [];
+    let resData = await api.position.novelList({ type_id });
+    this.rankList = resData;
+  }
+
+  get hashType() {
+    return (store.state as any).position.hashType;
   }
 
   mounted() {
     this.typeId = this.$route.params.typeId;
+    this.$store.commit("position/setActive", {
+      activityId: this.typeId
+    });
+    this.recommendList(this.typeId);
   }
 
   beforeRouteUpdate(to: any, from: any, next: any) {
     next();
-    console.log(22222222222222);
     this.typeId = this.$route.params.typeId;
+    this.$store.commit("position/setActive", {
+      activityId: this.typeId
+    });
+    this.recommendList(this.typeId);
   }
 }
 </script>
@@ -172,7 +107,7 @@ export default class App extends Vue {
     display: flex;
     align-items: center;
     .type-rank-item-chapter {
-      flex-grow: 5;
+      width: 400px;
       font-size: 16px;
       font-family: MicrosoftYaHei;
       color: rgba(51, 51, 51, 1);
@@ -182,7 +117,7 @@ export default class App extends Vue {
       }
     }
     .type-rank-item-auth {
-      flex-grow: 3;
+      width: 240px;
       font-size: 16px;
       font-family: MicrosoftYaHei;
       color: rgba(51, 51, 51, 1);

@@ -48,12 +48,12 @@
         <span>热门必读小说</span>
       </div>
       <div class="home-hot-book">
-        <div v-for="item in allBook" :key="item.id">
-          <img src />
+        <div v-for="item in hotList" :key="item.novel_id">
+          <img src="../assets/nopage.png" />
           <div class="home-hot-book-right-txt">
-            <p class="hop-right-title">{{ item.title }}</p>
-            <p class="hop-right-auth">{{ item.auth }}</p>
-            <p class="hop-right-detail">{{ item.detail }}</p>
+            <p class="hop-right-title">{{ item.name }}</p>
+            <p class="hop-right-auth">{{ item.author }}</p>
+            <p class="hop-right-detail">{{ item.brief }}</p>
           </div>
         </div>
       </div>
@@ -62,27 +62,27 @@
         <span>最新小说排行</span>
       </div>
       <div class="home-rank">
-        <div class="home-rank-item" v-for="item in rankook" :key="item.id">
+        <div class="home-rank-item" v-for="(item, index) in recommendList" :key="item.novel_id">
           <p class="home-rank-item-chapter">
             <span
               :class="[
                 'home-rank-item-square',
-                item.id == '1'
+                index == 0
                   ? 'red'
-                  : item.id == '2'
+                  : index == 1
                   ? 'orange'
-                  : item.id == '3'
+                  : index == 2
                   ? 'yellow'
                   : ''
               ]"
-            >{{ item.id }}</span>
-            {{ item.title }}
+            >{{ index + 1 }}</span>
+            {{ item.name }}
           </p>
           <p class="home-rank-item-chapter">
-            <router-link to="/2/33">{{ item.chapter }}</router-link>
+            <router-link to="/2/33">{{ item.latest_chapter.title }}</router-link>
           </p>
-          <p class="home-rank-item-auth">{{ item.audit }}</p>
-          <p class="home-rank-item-auth">{{ item.auth }}</p>
+          <p class="home-rank-item-auth">{{item.serial_status == 1 ? '已完结' : '连载中'}}</p>
+          <p class="home-rank-item-auth">{{ item.author }}</p>
         </div>
       </div>
     </div>
@@ -94,10 +94,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import store from "@/store";
 import CFooter from "../components/CFooter.vue";
+import CHeader from "../components/CHeader.vue";
 
 @Component({
-  components: { CFooter }
+  components: { CFooter, CHeader }
 })
 export default class App extends Vue {
   active = 1;
@@ -110,129 +112,6 @@ export default class App extends Vue {
       clickable: true
     }
   };
-  allBook = [
-    {
-      id: "1",
-      title: "凡人修仙传仙界篇",
-      auth: "妄语",
-      detail: "凡人修仙，风云再起时空穿梭 轮回逆转金仙太乙，大罗道"
-    },
-    {
-      id: "2",
-      title: "我要回现代",
-      auth: "妄语",
-      detail: "凡人修仙，风云再起时空穿梭 轮回逆转金仙太乙，大罗道"
-    },
-    {
-      id: "3",
-      title: "我在万古当大佬",
-      auth: "妄语",
-      detail: "凡人修仙，风云再起时空穿梭 轮回逆转金仙太乙，大罗道"
-    },
-    {
-      id: "4",
-      title: "修罗武神",
-      auth: "妄语",
-      detail:
-        "凡人修仙，风云再起时空穿梭 轮回逆转金仙太乙，大罗道大罗道大罗道大罗道大罗道大罗道道"
-    },
-    {
-      id: "5",
-      title: "道君",
-      auth: "妄语",
-      detail: "凡人修仙，风云再起时空穿梭 轮回逆转金仙太乙，大罗道"
-    },
-    {
-      id: "6",
-      title: "仙武帝尊",
-      auth: "妄语",
-      detail: "凡人修仙，风云再起时空穿梭 轮回逆转金仙太乙，大罗道"
-    },
-    {
-      id: "7",
-      title: "无双庶子",
-      auth: "妄语",
-      detail: "凡人修仙，风云再起时空穿梭 轮回逆转金仙太乙，大罗道"
-    },
-    {
-      id: "8",
-      title: "从斗罗开始打卡",
-      auth: "妄语",
-      detail: "凡人修仙，风云再起时空穿梭 轮回逆转金仙太乙，大罗道"
-    }
-  ];
-  rankook = [
-    {
-      id: "1",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "2",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "3",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "4",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "5",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "6",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "7",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "8",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "9",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "10",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    }
-  ];
 
   get mySwiper(): any {
     return this.$refs.mySwiper;
@@ -242,8 +121,15 @@ export default class App extends Vue {
     this.mySwiper.swiper.slideTo(0, 1000, false);
   }
 
+  get hotList() {
+    return (store.state as any).position.hotList;
+  }
+
+  get recommendList() {
+    return (store.state as any).position.recommendList;
+  }
+
   beforeRouteUpdate() {
-    console.log(333);
     console.log(this.$router);
   }
 }
@@ -326,7 +212,7 @@ export default class App extends Vue {
     display: flex;
     align-items: center;
     .home-rank-item-chapter {
-      flex-grow: 5;
+      width: 400px;
       font-size: 16px;
       font-family: MicrosoftYaHei;
       color: rgba(51, 51, 51, 1);
@@ -358,7 +244,7 @@ export default class App extends Vue {
       }
     }
     .home-rank-item-auth {
-      flex-grow: 3;
+      width: 240px;
       font-size: 16px;
       font-family: MicrosoftYaHei;
       color: rgba(51, 51, 51, 1);

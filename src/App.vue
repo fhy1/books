@@ -1,9 +1,7 @@
 <template>
   <div id="app">
     <div class="story-head">
-      <img
-        src="./assets/laba.png"
-      />本网站为非营利性质的网站，涉及的文学作品仅作为个人学习，研究，欣赏的用途，不用作商业用途；任何企业及个人不得转载，摘编，复制或利用其他方式使用本站所有内容;
+      <img src="./assets/laba.png" />本网站为非营利性质的网站，涉及的文学作品仅作为个人学习，研究，欣赏的用途，不用作商业用途；任何企业及个人不得转载，摘编，复制或利用其他方式使用本站所有内容;
     </div>
     <div class="story-logo">
       <img src="./assets/icon.png" alt />
@@ -12,17 +10,7 @@
         <p class="story-logo-website">www.gblwxs.com</p>
       </div>
     </div>
-    <div id="nav">
-      <div class="nav">
-        <router-link :key="item.id" v-for="item in navTitle" :to="item.rouerTo">
-          <div class="nav-title" @click="changeType(item.id)">
-            <div :class="active == item.id ? 'active' : ''">
-              {{ item.title }}
-            </div>
-          </div>
-        </router-link>
-      </div>
-    </div>
+    <c-header />
     <div class="app-body">
       <router-view />
     </div>
@@ -30,54 +18,11 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-
+import CHeader from "./components/CHeader.vue";
 @Component({
-  components: {}
+  components: { CHeader }
 })
-export default class App extends Vue {
-  active: number | string = 1;
-  navTitle = [
-    {
-      id: "1",
-      title: "首页",
-      rouerTo: "/"
-    },
-    {
-      id: "2",
-      title: "玄幻",
-      rouerTo: "/2"
-    },
-    {
-      id: "3",
-      title: "修真",
-      rouerTo: "/3"
-    },
-    {
-      id: "4",
-      title: "都市",
-      rouerTo: "/4"
-    },
-    {
-      id: "5",
-      title: "古言",
-      rouerTo: "/5"
-    },
-    {
-      id: "6",
-      title: "历史",
-      rouerTo: "/6"
-    }
-  ];
-
-  changeType(num: number) {
-    console.log(num);
-    this.active = num;
-  }
-
-  mounted() {
-    this.active = this.$route.params.typeId;
-  }
-}
+export default class App extends Vue {}
 </script>
 
 <style lang="less">
@@ -172,15 +117,5 @@ div {
       color: #861915;
     }
   }
-  // padding: 30px;
-
-  // a {
-  //   font-weight: bold;
-  //   color: #2c3e50;
-
-  //   &.router-link-exact-active {
-  //     color: #42b983;
-  //   }
-  // }
 }
 </style>
