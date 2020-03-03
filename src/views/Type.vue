@@ -8,9 +8,13 @@
     </div>
     <div class="type-rank">
       <div class="type-rank-item" v-for="item in rankList" :key="item.novel_id">
-        <p class="type-rank-item-chapter">{{ item.name }}</p>
         <p class="type-rank-item-chapter">
-          <router-link :to="'/' + item.novel_id">{{ item.latest_chapter.title }}</router-link>
+          <router-link :to="'/' + item.type_id + '/'  + item.novel_id">{{ item.name }}</router-link>
+        </p>
+        <p class="type-rank-item-chapter">
+          <router-link
+            :to="'/' + item.type_id + '/'  + item.novel_id"
+          >{{ item.latest_chapter.title }}</router-link>
         </p>
         <p class="type-rank-item-auth">{{item.serial_status == 1 ? '已完结' : '连载中'}}</p>
         <p class="type-rank-item-auth">{{ item.author }}</p>

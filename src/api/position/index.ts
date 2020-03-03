@@ -24,10 +24,19 @@ export default {
     });
     return res.data;
   },
-  async chapter() {
+  async chapter(query: any = {}) {
     let res = await http({
       method: "get",
-      url: "/api/chapter"
+      url: "/api/chapter",
+      params: query
+    });
+    return res.data;
+  },
+  async chapterNovel(query: any = {}) {
+    let res = await http({
+      method: "get",
+      url: "/api/chapter/detail",
+      params: query
     });
     return res.data;
   }

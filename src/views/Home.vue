@@ -18,7 +18,7 @@
           <div class="swiper-pagination" style slot="pagination"></div>
         </swiper>
       </div>
-      <div>
+      <!-- <div>
         <div>
           <p>御鬼狂妃：高冷王爷太撩人！</p>
           <p>
@@ -40,7 +40,7 @@
             只是第一步，21世纪什么最重要？ 人才！我曾乐不投资那些俗物要…
           </p>
         </div>
-      </div>
+      </div>-->
     </div>
     <div class="home">
       <div class="home-title">
@@ -48,7 +48,7 @@
         <span>热门必读小说</span>
       </div>
       <div class="home-hot-book">
-        <div v-for="item in hotList" :key="item.novel_id">
+        <div v-for="item in hotList" :key="item.novel_id" v-on:click="gotoBook(item)">
           <img src="../assets/nopage.png" />
           <div class="home-hot-book-right-txt">
             <p class="hop-right-title">{{ item.name }}</p>
@@ -76,10 +76,12 @@
                   : ''
               ]"
             >{{ index + 1 }}</span>
-            {{ item.name }}
+            <router-link :to="'/' + item.type_id + '/' + item.novel_id">{{ item.name }}</router-link>
           </p>
           <p class="home-rank-item-chapter">
-            <router-link to="/2/33">{{ item.latest_chapter.title }}</router-link>
+            <router-link
+              :to="'/' + item.type_id + '/' + item.novel_id"
+            >{{ item.latest_chapter.title }}</router-link>
           </p>
           <p class="home-rank-item-auth">{{item.serial_status == 1 ? '已完结' : '连载中'}}</p>
           <p class="home-rank-item-auth">{{ item.author }}</p>
@@ -104,6 +106,7 @@ import CHeader from "../components/CHeader.vue";
 export default class App extends Vue {
   active = 1;
   swiperOption = {
+    loop: true,
     autoplay: {
       delay: 3000 //1秒切换一次
     },
@@ -121,16 +124,22 @@ export default class App extends Vue {
     this.mySwiper.swiper.slideTo(0, 1000, false);
   }
 
+  gotoBook(item: any) {
+    this.$router.push({
+      name: "book",
+      params: {
+        typeId: item.type_id,
+        bookId: item.novel_id
+      }
+    });
+  }
+
   get hotList() {
     return (store.state as any).position.hotList;
   }
 
   get recommendList() {
     return (store.state as any).position.recommendList;
-  }
-
-  beforeRouteUpdate() {
-    console.log(this.$router);
   }
 }
 </script>
@@ -165,6 +174,7 @@ export default class App extends Vue {
   margin-bottom: 43px;
   display: flex;
   flex-wrap: wrap;
+  cursor: pointer;
   & > div {
     width: 25%;
     padding: 16px 0;
@@ -257,40 +267,40 @@ export default class App extends Vue {
   margin: 12px auto 25px;
   display: flex;
   & > div:nth-child(1) {
-    width: 860px;
+    width: 100%;
     height: 330px;
   }
-  & > div:nth-child(2) {
-    width: 420px;
-    height: 330px;
-    padding-left: 24px;
-    & > div {
-      width: 100%;
-      height: 110px;
-      display: flex;
-      justify-content: center;
-      border-bottom: 1px solid #d8d8d8;
-      flex-direction: column;
-      text-align: left;
-      & > p:nth-child(1) {
-        font-size: 18px;
-        font-family: MicrosoftYaHei-Bold, MicrosoftYaHei;
-        font-weight: bold;
-        color: rgba(67, 67, 71, 1);
-        margin-bottom: 8px;
-      }
-      & > p:nth-child(2) {
-        font-size: 13px;
-        line-height: 20px;
-        font-family: MicrosoftYaHei;
-        color: rgba(67, 67, 71, 1);
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
-        overflow: hidden;
-      }
-    }
-  }
+  // & > div:nth-child(2) {
+  //   width: 420px;
+  //   height: 330px;
+  //   padding-left: 24px;
+  //   & > div {
+  //     width: 100%;
+  //     height: 110px;
+  //     display: flex;
+  //     justify-content: center;
+  //     border-bottom: 1px solid #d8d8d8;
+  //     flex-direction: column;
+  //     text-align: left;
+  //     & > p:nth-child(1) {
+  //       font-size: 18px;
+  //       font-family: MicrosoftYaHei-Bold, MicrosoftYaHei;
+  //       font-weight: bold;
+  //       color: rgba(67, 67, 71, 1);
+  //       margin-bottom: 8px;
+  //     }
+  //     & > p:nth-child(2) {
+  //       font-size: 13px;
+  //       line-height: 20px;
+  //       font-family: MicrosoftYaHei;
+  //       color: rgba(67, 67, 71, 1);
+  //       display: -webkit-box;
+  //       -webkit-box-orient: vertical;
+  //       -webkit-line-clamp: 2;
+  //       overflow: hidden;
+  //     }
+  //   }
+  // }
 }
 
 .swiper-pagination {

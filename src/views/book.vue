@@ -2,15 +2,22 @@
   <div class="book">
     <div class="book-body">
       <div class="book-bread">
-        <div>当前位置: 首页</div>
+        <div>
+          当前位置:
+          <span class="isclick" @click="gotoHome">首页</span>
+          <span>></span>
+          <span class="isclick" @click="gotoType">{{ hashType[typeId] }}</span>
+          <span>></span>
+          {{ bookDetail.name }}
+        </div>
       </div>
       <div class="book-nav">
-        <img src />
+        <img src="../assets/nopage.png" />
         <div>
-          <p>狐妃嚣张： 独宠高冷仙君</p>
-          <p>木子已饼</p>
-          <p>心有乾坤性有种、胸中五气穿云霄。饮尽三千神魔血、踏碎凌霄万重天。 少年背负老祖遗愿，踏上了复仇的修仙之路。他炼神山、吞火海、熔江河、摘日月星辰，谱写出一条 惊天动地的旅程。（建了一个QQ群，群号：664215883。喜欢的朋友可以进来交流一下。）</p>
-          <p>开始阅读</p>
+          <p>{{ bookDetail.name }}</p>
+          <p>{{ bookDetail.author }}</p>
+          <p>{{ bookDetail.brief }}</p>
+          <p @click="gotoRead">开始阅读</p>
         </div>
       </div>
       <div class="type-chapter">
@@ -20,8 +27,10 @@
         </div>
       </div>
       <div class="book-item">
-        <div class="book-item" v-for="item in rankook" :key="item.id">
-          <router-link to="/2/33/444">{{ item.chapter }}</router-link>
+        <div class="book-item" v-for="item in rankook" :key="item.chapter_id">
+          <router-link
+            :to="'/' + bookDetail.type_id + '/' + bookDetail.novel_id + '/' + item.chapter_id"
+          >{{ item.title }}</router-link>
         </div>
       </div>
     </div>
@@ -33,94 +42,90 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import CFooter from "../components/CFooter.vue";
+import { Message } from "element-ui";
+import api from "@/api";
+import store from "@/store";
 
 @Component({
   components: { CFooter }
 })
 export default class App extends Vue {
   typeId: any = 1;
+  bookDetail: any = {};
+  rankook: any = [];
 
-  rankook = [
-    {
-      id: "1",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "2",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "3",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "4",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "5",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "6",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "7",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "8",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "9",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
-    },
-    {
-      id: "10",
-      title: "绝世武神",
-      chapter: "第九章 惊人效果",
-      audit: "连载中",
-      auth: "零幺七"
+  async getChapter(bookId: any) {
+    let resData = await api.position.chapter({ novel_id: bookId });
+    this.bookDetail = resData.novel_info;
+    this.rankook = resData.chapter_list;
+    let hashBook: any = {};
+    resData.chapter_list.forEach((item: any) => {
+      hashBook[item.chapter_id] = item.title;
+    });
+    console.log(resData);
+    this.$store.commit("book/set", {
+      bookName: resData.novel_info.name,
+      bookId: bookId,
+      hashBook: hashBook
+    });
+  }
+
+  get hashType() {
+    return (store.state as any).position.hashType;
+  }
+
+  gotoHome() {
+    this.$store.commit("position/setActive", {
+      activityId: 0
+    });
+    this.$router.push({
+      name: "Home"
+    });
+  }
+
+  gotoType() {
+    this.$router.push({
+      name: "type",
+      params: {
+        typeId: this.typeId
+      }
+    });
+  }
+
+  gotoRead() {
+    if (this.rankook.length > 0) {
+      this.$router.push({
+        name: "content",
+        params: {
+          typeId: this.typeId,
+          bookId: this.bookDetail.novel_id,
+          contantId: this.rankook[0].chapter_id
+        }
+      });
+    } else {
+      Message({
+        message: "暂无更多章节",
+        type: "warning"
+      });
     }
-  ];
+  }
 
   mounted() {
     this.typeId = this.$route.params.typeId;
+    this.$store.commit("position/setActive", {
+      activityId: this.typeId
+    });
+    this.getChapter(this.$route.params.bookId);
   }
 
   beforeRouteUpdate(to: any, from: any, next: any) {
     next();
-    console.log(22222222222222);
     this.typeId = this.$route.params.typeId;
+    this.$store.commit("position/setActive", {
+      activityId: this.typeId
+    });
+    this.getChapter(this.$route.params.bookId);
+    // this.recommendList(this.typeId);
   }
 }
 </script>
@@ -134,6 +139,20 @@ export default class App extends Vue {
     text-align: left;
     .book-bread {
       margin: 30px 0;
+      font-size: 16px;
+      font-family: MicrosoftYaHei;
+      color: #999999;
+      span {
+        margin: 3px;
+        color: #333333;
+      }
+      .isclick {
+        cursor: pointer;
+        a {
+          text-decoration: none;
+          color: #333333;
+        }
+      }
     }
   }
 

@@ -2,7 +2,8 @@ import axios from "axios";
 import { Message } from "element-ui";
 
 const request = axios.create({
-  baseURL: "http://www.gblwxs.net:99"
+  // baseURL: "http://www.gblwxs.net:99"
+  baseURL: "http://novel.gblwxs.net:99/"
 });
 
 request.interceptors.response.use(
