@@ -11,6 +11,7 @@ import "element-ui/lib/theme-chalk/index.css";
 // require styles
 import "swiper/dist/css/swiper.css";
 
+import "./style/index.css";
 // import { Component } from "vue-property-decorator";
 Component.registerHooks(["beforeRouteEnter", "beforeRouteUpdate"]);
 Vue.use(VueAwesomeSwiper /* { default global options } */);

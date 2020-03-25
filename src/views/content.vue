@@ -121,6 +121,7 @@ export default class App extends Vue {
   }
 
   async getChapterNovel(chapterId: any) {
+    this.contantList = [];
     let resData = await api.position.chapterNovel({ chapter_id: chapterId });
     this.chapterDetail = resData;
     this.contantList = resData.content.split(/[(\r\n)\r\n]+/);
@@ -145,7 +146,6 @@ export default class App extends Vue {
   }
 
   get savebookName() {
-    console.log((store.state as any).book);
     return (store.state as any).book.bookName;
   }
   get savebookId() {

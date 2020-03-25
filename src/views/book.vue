@@ -33,6 +33,11 @@
           >{{ item.title }}</router-link>
         </div>
       </div>
+      <div class="content-body-nav-end">
+        <p>隔壁老王小说网提醒您：</p>
+        <p>1.文学作品所描述的内容只是作者个人观点,与隔壁老王小说网的立场无关,本站只为书友提供阅读平台。</p>
+        <p>2.《{{ bookDetail.name }}》是一本情节与文笔俱佳的书，情节跌宕起伏，扣人心弦，文笔优美，为了让《{{ bookDetail.name }}》作者{{ bookDetail.author }}能提供更多更好的作品，建议阅读并购买正版图书，或多多宣传本书和推荐，也是对《{{ bookDetail.name }}》作者{{ bookDetail.author }}的一种另类支持！</p>
+      </div>
     </div>
     <div class="footer">
       <c-footer />
@@ -62,7 +67,6 @@ export default class App extends Vue {
     resData.chapter_list.forEach((item: any) => {
       hashBook[item.chapter_id] = item.title;
     });
-    console.log(resData);
     this.$store.commit("book/set", {
       bookName: resData.novel_info.name,
       bookId: bookId,
@@ -113,16 +117,17 @@ export default class App extends Vue {
   mounted() {
     this.typeId = this.$route.params.typeId;
     this.$store.commit("position/setActive", {
-      activityId: this.typeId
+      activityId: this.typeId + ""
     });
     this.getChapter(this.$route.params.bookId);
   }
 
   beforeRouteUpdate(to: any, from: any, next: any) {
     next();
+    // parent.window.scrollTo(0, 0);
     this.typeId = this.$route.params.typeId;
     this.$store.commit("position/setActive", {
-      activityId: this.typeId
+      activityId: this.typeId + ""
     });
     this.getChapter(this.$route.params.bookId);
     // this.recommendList(this.typeId);
@@ -169,16 +174,28 @@ export default class App extends Vue {
       flex-direction: column;
       justify-content: center;
       & > p:nth-child(1) {
+        max-width: 730px;
         font-size: 26px;
         font-family: MicrosoftYaHei-Bold, MicrosoftYaHei;
         font-weight: bold;
         color: rgba(51, 51, 51, 1);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        word-break: break-all;
       }
       & > p:nth-child(2) {
+        max-width: 730px;
         font-size: 16px;
         font-family: MicrosoftYaHei;
         color: rgba(170, 170, 170, 1);
         margin: 12px 0;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        word-break: break-all;
       }
       & > p:nth-child(3) {
         max-width: 730px;
@@ -189,6 +206,7 @@ export default class App extends Vue {
         font-family: MicrosoftYaHei;
         color: rgba(102, 102, 102, 1);
         margin-bottom: 25px;
+        word-break: break-all;
       }
       & > p:nth-child(4) {
         width: 217px;
@@ -200,6 +218,7 @@ export default class App extends Vue {
         font-size: 16px;
         font-family: MicrosoftYaHei;
         color: rgba(255, 255, 255, 1);
+        cursor: pointer;
       }
     }
   }
@@ -239,6 +258,18 @@ export default class App extends Vue {
         font-family: MicrosoftYaHei;
         color: rgba(51, 51, 51, 1);
       }
+    }
+  }
+  .content-body-nav-end {
+    margin-top: 20px;
+    padding-bottom: 20px;
+    p {
+      margin-top: 10px;
+      font-family: PingFangSC-Regular, "-apple-system", Simsun;
+      font-size: 12px;
+      line-height: 20px;
+      text-align: left;
+      color: #1a1a1a;
     }
   }
 }

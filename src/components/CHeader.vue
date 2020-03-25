@@ -1,11 +1,19 @@
 <template>
   <div id="nav">
     <div class="nav">
-      <router-link :key="item.typeId" v-for="item in navTitle" :to="item.rouerTo">
+      <el-tabs style="width:1280px;" :value="active" @tab-click="changeType">
+        <el-tab-pane
+          v-for="item in navTitle"
+          :key="item.typeId"
+          :label="item.title"
+          :name="item.typeId+''"
+        />
+      </el-tabs>
+      <!-- <router-link :key="item.typeId" v-for="item in navTitle" :to="item.rouerTo">
         <div class="nav-title" @click="changeType(item.typeId)">
           <div :class="active == item.typeId ? 'active' : ''">{{ item.title }}</div>
         </div>
-      </router-link>
+      </router-link>-->
     </div>
   </div>
 </template>
@@ -43,15 +51,27 @@ export default class CHeader extends Vue {
     return (store.state as any).position.activityId;
   }
 
-  async changeType(num: number | string) {
-    if (num == 0) {
-      this.fetchHome();
-    } else {
-      this.fetchTypeList(num);
+  async changeType(tab: any) {
+    const num = tab.name;
+    if (tab.name != this.active) {
+      if (num == 0) {
+        this.fetchHome();
+        this.$router.push({
+          name: "Home"
+        });
+      } else {
+        this.fetchTypeList(num);
+        this.$router.push({
+          name: "type",
+          params: {
+            typeId: num
+          }
+        });
+      }
+      this.$store.commit("position/setActive", {
+        activityId: num
+      });
     }
-    this.$store.commit("position/setActive", {
-      activityId: num
-    });
   }
 
   async fetchTypeList(typeId: any) {

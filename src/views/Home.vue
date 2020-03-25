@@ -2,7 +2,8 @@
   <div>
     <div class="banana">
       <div>
-        <swiper style="height: 100%;" :options="swiperOption" ref="mySwiper">
+        <img style="width:100%;height:100%" src="../assets/pcbanner.jpg" />
+        <!-- <swiper style="height: 100%;" :options="swiperOption" ref="mySwiper">
           <swiper-slide>
             <img style="width:100%;height:100%" src />
           </swiper-slide>
@@ -16,7 +17,7 @@
             <img style="width:100%;height:100%" src />
           </swiper-slide>
           <div class="swiper-pagination" style slot="pagination"></div>
-        </swiper>
+        </swiper>-->
       </div>
       <!-- <div>
         <div>
@@ -80,7 +81,7 @@
           </p>
           <p class="home-rank-item-chapter">
             <router-link
-              :to="'/' + item.type_id + '/' + item.novel_id"
+              :to="'/' + item.type_id + '/' + item.novel_id + '/' + item.latest_chapter.chapter_id"
             >{{ item.latest_chapter.title }}</router-link>
           </p>
           <p class="home-rank-item-auth">{{item.serial_status == 1 ? '已完结' : '连载中'}}</p>
@@ -108,7 +109,7 @@ export default class App extends Vue {
   swiperOption = {
     loop: true,
     autoplay: {
-      delay: 3000 //1秒切换一次
+      delay: 1000 //1秒切换一次
     },
     pagination: {
       el: ".swiper-pagination",
@@ -182,6 +183,7 @@ export default class App extends Vue {
     img {
       width: 96px;
       height: 128px;
+      flex-shrink: 0;
     }
     .home-hot-book-right-txt {
       padding: 0 13px;
@@ -189,17 +191,30 @@ export default class App extends Vue {
       flex-direction: column;
       justify-content: center;
       .hop-right-title {
+        width: 200px;
         font-size: 18px;
         font-family: MicrosoftYaHei;
         color: rgba(51, 51, 51, 1);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        word-break: break-all;
       }
       .hop-right-auth {
+        width: 200px;
         font-size: 12px;
         font-family: MicrosoftYaHei;
         color: rgba(170, 170, 170, 1);
         margin: 8px 0 16px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        word-break: break-all;
       }
       .hop-right-detail {
+        width: 200px;
         font-size: 14px;
         font-family: MicrosoftYaHei;
         color: rgba(102, 102, 102, 1);
@@ -207,6 +222,7 @@ export default class App extends Vue {
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
+        word-break: break-all;
       }
     }
   }
@@ -226,6 +242,11 @@ export default class App extends Vue {
       font-size: 16px;
       font-family: MicrosoftYaHei;
       color: rgba(51, 51, 51, 1);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      word-break: break-all;
       a {
         color: rgba(51, 51, 51, 1);
         text-decoration: none;
@@ -258,6 +279,11 @@ export default class App extends Vue {
       font-size: 16px;
       font-family: MicrosoftYaHei;
       color: rgba(51, 51, 51, 1);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      word-break: break-all;
     }
   }
 }

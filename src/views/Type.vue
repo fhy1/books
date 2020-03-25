@@ -13,7 +13,7 @@
         </p>
         <p class="type-rank-item-chapter">
           <router-link
-            :to="'/' + item.type_id + '/'  + item.novel_id"
+            :to="'/' + item.type_id + '/'  + item.novel_id + '/' + item.latest_chapter.chapter_id"
           >{{ item.latest_chapter.title }}</router-link>
         </p>
         <p class="type-rank-item-auth">{{item.serial_status == 1 ? '已完结' : '连载中'}}</p>
@@ -114,6 +114,11 @@ export default class App extends Vue {
       width: 400px;
       font-size: 16px;
       font-family: MicrosoftYaHei;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      word-break: break-all;
       color: rgba(51, 51, 51, 1);
       a {
         text-decoration: none;
@@ -125,6 +130,11 @@ export default class App extends Vue {
       font-size: 16px;
       font-family: MicrosoftYaHei;
       color: rgba(51, 51, 51, 1);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      overflow: hidden;
+      word-break: break-all;
     }
   }
 }
